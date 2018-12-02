@@ -1,65 +1,66 @@
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
-var plotly = require('plotly')('joejoejoejoe','HWFNV0n8O7NUns70pvPK');
-
-    // testing out  y = 2x^3 -4x^2 + 7x
+var chart = require('chart.js');
 
 
 
+/*Generates sample coefficients and x values for use if none are supplied in the request
+*
+* These coefficients and x values are for y = 2x^3 -4x^2 + 7x  | x E Z, 0 < x < 8
+ */
+function createSampleParams(){
+    return { coeffs: [7,-4,2], xvals: [1,2,3,4,5,6,7]};
+}
 
-var trace1 = {
-    x: [1, 2, 3, 4],
-    y: [10, 15, 13, 17],
-    type: "scatter"
-};
-var trace2 = {
-    x: [1, 2, 3, 4],
-    y: [16, 5, 11, 9],
-    type: "scatter"
-};
-var data = [trace1, trace2];
-var graphOptions = {filename: "basic-line", fileopt: "overwrite"};
-plotly.plot(data, graphOptions, function (err, msg) {
-    console.log(msg);
-});
 
-var degreeToCoef = [7,-4,2];
-var testx = [1,2,3,4,5,6,7]
 
-function createYvals (coeffs, xvals) {
+/*Given an array of X values, and an array of coefficients for a poloynomial function,
+* this method creates an array of corresponding y values
+* Coefficients for each exponent are in the index of their degree.  Ex:
+*
+* y = 2x^3 -4x^2 + 7x   would translate into a coefficient array of [7,-4,2]
+*
+* y = 12x^6 + 2x^2      would translate into a coefficient array of [0,2,0,0,0,12]
+*
+* y = 3x^3 + x^2        would translate into a coefficient array of [0,1,3]
+*
+* */
+function createPolyYvals (coeffs, xvals) {
     var yvals = [];
     for (x = 0; x < xvals.length; x++) {
         var xtot = 0;
         for (co = 0; co < coeffs.length; co++) {
             xtot += Math.pow(xvals[x], co + 1) * coeffs[co];
-            console.log("x = " + xvals[x]);
-            console.log("coefficient = " + coeffs[co]);
-            console.log("exp = " + (co + 1));
-
         }
         yvals.push(xtot);
     }
     return yvals;
 }
 
+
+/*Parses arguments from the request for use in creating a graph*/
+function getURLParamters(req){
+    var params = url.parse(req.url,true).query;
+    var coeffs = [];
+    var xvals = [];
+    if (params['coeffs']) {
+        coeffs = params['coeffs'].split(",");
+    }
+    if (params['xvals']) {
+        xvals = params['xvals'].split(",");
+    }
+    var params = { coeffs: coeffs, xvals: xvals};
+    return params;
+}
+
+
+
+/* Initiate server
+*/
 http.createServer(function (req, res) {
-
-    var args = url.parse(req.url, true).query;
-    var type = args.type;
-    var m = args.m;
-    console.log(createYvals(degreeToCoef, testx));
-
-
-/*    var pows = [1,2,3,5];
-    var coffs = [1,2,0,0];
-    yvals = genModel(pows,coffs,5,10,1);
-    console.log(yvals);*/
-/*    fs.readFile('htmlskel.html', function(err, skel) {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(skel);
-        res.end();
-    });*/
-    var text = "type ->" + args.type + "\nx value ->" + args.x;
-    res.end(text);
+    var params = getURLParamters(req);
+    var yvals = createPolyYvals(degreeToCoef, testx);
+    res.write("coefficients: " + params.coeffs + " x-values: " + params.xvals + "y-values:" + yvals);
+    res.end();
 }).listen(8080);

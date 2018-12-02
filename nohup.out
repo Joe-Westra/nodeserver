@@ -1,0 +1,58 @@
+[?1049h[22;0;0t[1;24r(B[m[4l[?7h[39;49m[?1h=[?1h=[?1h=[?25l[39;49m(B[m[H[2J[22;35H(B[0;7m[ New File ](B[m[H(B[0;7m  GNU nano 2.9.3                         test                                   [1;79H(B[m[23d(B[0;7m^G(B[m Get Help  (B[0;7m^O(B[m Write Out (B[0;7m^W(B[m Where Is  (B[0;7m^K(B[m Cut Text  (B[0;7m^J(B[m Justify   (B[0;7m^C(B[m Cur Pos[24d(B[0;7m^X(B[m Exit[14G(B[0;7m^R(B[m Read File (B[0;7m^\(B[m Replace   (B[0;7m^U(B[m Uncut Text(B[0;7m^T(B[m To Spell  (B[0;7m^_(B[m Go To Line[22d[3d[39;49m(B[m[?12l[?25h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[24;1H[?1049l[23;0;0t[?1l>Too many errors from stdin[?1049h[22;0;0t[1;24r(B[m[4l[?7h[39;49m[?1h=[?1h=[?1h=[?25l[39;49m(B[m[H[2J[22;35H(B[0;7m[ New File ](B[m[H(B[0;7m  GNU nano 2.9.3                         test                                   [1;79H(B[m[23d(B[0;7m^G(B[m Get Help  (B[0;7m^O(B[m Write Out (B[0;7m^W(B[m Where Is  (B[0;7m^K(B[m Cut Text  (B[0;7m^J(B[m Justify   (B[0;7m^C(B[m Cur Pos[24d(B[0;7m^X(B[m Exit[14G(B[0;7m^R(B[m Read File (B[0;7m^\(B[m Replace   (B[0;7m^U(B[m Uncut Text(B[0;7m^T(B[m To Spell  (B[0;7m^_(B[m Go To Line[22d[3d[39;49m(B[m[?12l[?25h
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[24;1H[?1049l[23;0;0t[?1l>Too many errors from stdinevents.js:167
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EACCES: permission denied 0.0.0.0:80
+    at Server.setupListenHandle [as _listen2] (net.js:1277:19)
+    at listenInCluster (net.js:1342:12)
+    at Server.listen (net.js:1429:7)
+    at Object.<anonymous> (/media/FILES/ProgVent/node/server.js:52:4)
+    at Module._compile (internal/modules/cjs/loader.js:722:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:733:10)
+    at Module.load (internal/modules/cjs/loader.js:620:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:560:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:552:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:775:12)
+Emitted 'error' event at:
+    at emitErrorNT (net.js:1321:8)
+    at internalTickCallback (internal/process/next_tick.js:72:19)
+    at process._tickCallback (internal/process/next_tick.js:47:5)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:778:11)
+    at startup (internal/bootstrap/node.js:300:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:826:3)
