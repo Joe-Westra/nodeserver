@@ -7,17 +7,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <title>Node.js Demo</title>
+    <style>
+    *{
+      margin: 5px;
+    }
+      body{
+        background-color: linen;
+      }
+      h1{
+        text-align: center;
+      }
+    </style>
 </head>
 <body>
-<p>Javascript is a language that I'm not terribly proficient with, so for this experiment I...</p>
-<ul>Created a new VM in a new IaaS (DigitalOcean)</ul>
+<h1>Adventures in Node.js</h1>
+<h4>This website aims to serve as an evolving experiment with Node.js; an excercise in writing better JavaScript; and as a foray into signal processing</h4>
+<p>Node.js is a runtime environment that I haven't worked with before this week.  Factor that in with the fact that Javascript is a language I'm not terribly proficient with, so for this experiment I...</p>
+<ul>Created a new VM in an unfamiliar cloudhosting solution (DigitalOcean)</ul>
 <ul>Installed Node.js, poked around with tutorials</ul>
-<ul>Researched signal filtering modules for Node</ul>
-<ul>Brushed up on my JS</ul>
+<ul>Brushed up on my JS (ongoing!)</ul>
 <ul>Researched methods for ensuring server is persistent, implemented pm2</ul>
 <ul>Researched client-server communication options for Node, implemented socket.io module</ul>
 <ul>Researched charting modules and implemented Charts.js</ul>
-<p>Below is a graph of a polynomial function.  The parameters of the function can be set in the form below.  Note, this functionality could be served purely server side with JS, but has been implemented with a client-server paradigm.  An option for 'noise' to be added is next, and then a signal filter will be applied to clean up the noise.</p>
+<ul>Researched signal filtering modules for Node, there are multiple options for this end</ul>
+<p>As the goal for this first assignment is to establish a Node server to do some signal processing, I first wanted to create some functionality to 'create signals'.  This begins with describing a function; in this case I chose a polynomial function.  Maybe not the best choice in hindsight, but it's there.  Next, I wanted to graph it in order to visualize the process.  This is as far as I have gotten so far, but in the next few evenings I intend to add an overlay of 'noise', randomly generated using a normal distribution, and then apply various filters to see how well they 'clean up' the noise.</p>
+
+<p>Below is a graph of a polynomial function.  The parameters of the function can be set in the form below.  Note, this functionality could be served purely server side with JS, but has been implemented via a client-server paradigm with the server doing the 'heavy lifting'.  As stated, an option for 'noise' to be added is next to come, and then a signal filter will be applied to clean up the noise.</p>
 
 <div class="container">
     <canvas id="myChart"></canvas>
@@ -95,7 +110,7 @@
 
 </script>
 
-
+<div id="form">
 <h1>Modify the data</h1>
 <p><b>Note:</b> currently, there is no input validation implemented!</p>
 <p>Please enter coefficients for a multiple degree polynomial, separated by commas, for example:</p><ul>
@@ -109,7 +124,7 @@
 <input id="xvals">
 
 <button type="refresh_values" onclick="replot()">Create new graph</button>
-
+</div>
 
 <script type="text/javascript">
   function replot(){
