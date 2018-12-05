@@ -4,7 +4,7 @@ var io = require('socket.io')(app);
 var fs = require('fs');
 const random = require('random');
 
-app.listen(2222);
+app.listen(80);
 
 function handler (req, res) {
   var params = getURLParamters(req);
@@ -25,16 +25,12 @@ function handler (req, res) {
   });
 }
 
-// io.on('connection', function (socket) {
-//   socket.emit('refresh_values', 17);
-//   socket.on('my other event', function (data) {
-//     console.log(data);
-//   });
-  io.on('values submitted', function (values) {
+ io.on('connection', function (socket) {
+  socket.on('values submitted', function (values) {
     console.log("submitting new info");
     let ys = createPolyYvals (values.coeffs, values.xvals);
     console.log(ys);
-    io.emit('values returned', {xvals: values.xvals, yvals: ys} );
+    socket.emit('values returned', {xvals: values.xvals, yvals: ys} );
   });
 });
 
