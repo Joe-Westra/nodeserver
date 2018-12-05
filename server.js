@@ -2,16 +2,23 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 var chart = require('chart.js');
-
+var io = require('socket.io')(http);
 
 
 /*Generates sample coefficients and x values for use if none are supplied in the request
 *
 * These coefficients and x values are for y = 2x^3 -4x^2 + 7x  | x E Z, 0 < x < 8
- */
+*/
 function createSampleParams(){
+    console.log("Using sample params");
     return { coeffs: [7,-4,2], xvals: [1,2,3,4,5,6,7]};
 }
+
+
+
+
+
+
 
 
 
@@ -42,13 +49,20 @@ function createPolyYvals (coeffs, xvals) {
 /*Parses arguments from the request for use in creating a graph*/
 function getURLParamters(req){
     var params = url.parse(req.url,true).query;
+
+
+    //check to see if the parameters are from a socket.io request.
     var coeffs = [];
     var xvals = [];
-    if (params['coeffs']) {
+    if (typeof params['coeffs'] !== 'undefined') {
         coeffs = params['coeffs'].split(",");
+    } else {
+        return createSampleParams();  //mandatory for creating model!
     }
-    if (params['xvals']) {
+    if (typeof params['xvals'] !== 'undefined') {
         xvals = params['xvals'].split(",");
+    } else {
+        return createSampleParams();  //mandatory for creating model!
     }
     var params = { coeffs: coeffs, xvals: xvals};
     return params;
@@ -56,11 +70,25 @@ function getURLParamters(req){
 
 
 
-/* Initiate server
+/*
+* Initiate server
 */
 http.createServer(function (req, res) {
     var params = getURLParamters(req);
-    var yvals = createPolyYvals(degreeToCoef, testx);
-    res.write("coefficients: " + params.coeffs + " x-values: " + params.xvals + "y-values:" + yvals);
-    res.end();
+    console.log(params);
+    var yvals = createPolyYvals(params.coeffs, params.xvals);
+    var mapping = {xvals: params.xvals, yvals: yvals};
+
+
+//    res.write("coefficients: " + params.coeffs + " x-values: " + params.xvals + "y-values:" + yvals);
+    fs.readFile('htmlskel.html', function(err, data) {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        io.emit('refresh_values', mapping)
+        // io.on('connection', function(socket) {
+        //   console.log("connection made");
+        // });
+        res.write(data);
+        res.end();
+    });
+    // res.end();
 }).listen(8080);

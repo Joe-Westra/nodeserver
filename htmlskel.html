@@ -1,21 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Node.js Demo</title>
+</head>
 <body>
-<header>
-    <h1>Learning Node.js</h1>
-</header>
-<section id="welcome">
+<p>Javascript is a language that I'm not terribly proficient with, so for this experiment I...</p>
+<ul>Created a new VM in a new IaaS (DigitalOcean)</ul>
+<ul>Installed Node.js, poked around with tutorials</ul>
+<ul>Researched signal filtering modules for Node</ul>
+<ul>Brushed up on my JS</ul>
+<ul>Researched methods for ensuring server is persistent, implemented pm2</ul>
+<ul>Researched charting modules and implemented Charts.js</ul>
+<p>Below is a graph of a polynomial function.  The parameters of the function can be set in the URL, as this demonstrates that this information is being processed server-side, and not strictly in the browser.  An option for noise to be added is next, and then a signal filter will be applied to clean up the noise.</p>
+<div class="container">
+    <canvas id="myChart"></canvas>
+</div>
 
-    <p>Just checking out what node can do...</p>
-    <p>My goal is to create a new VM, run Node.js as a server on it and to explore some noise filtering libraries for Node.js</p>
-</section>
-<canvas id="myChart"></canvas>
-<section id="purpose">
-    <h1>Wait, why?</h1>
-    <p>So I'll be using this site for the following reasons:
-    <ul><li>To learn Node.js and apply it to data manipulation.</li>
-    <li>to increase my web development fluency</li>
-    <li>As a documentation and educational resource for my Data Sciences journey</li></ul></p>
-</section>
-<footer>
-    <h5>like me in real life!</h5>
-</footer>
+<script>
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "highdea.ca:8080/getmodel", true);
+
+
+
+    let myChart = document.getElementById('myChart').getContext('2d');
+
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = 'Ubuntu';
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = '#777';
+
+    let massPopChart = new Chart(myChart, {
+        type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{
+            labels:['Boston', 'Worcester', 'Springfield', 'Lowell', 'Cambridge', 'New Bedford'],
+            datasets:[{
+                label:'Population',
+                data:[
+                    617594,
+                    181045,
+                    153060,
+                    106519,
+                    105162,
+                    95072
+                ],
+                //backgroundColor:'green',
+                backgroundColor:[
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 99, 132, 0.6)'
+                ],
+                borderWidth:1,
+                borderColor:'#777',
+                hoverBorderWidth:3,
+                hoverBorderColor:'#000'
+            }]
+        },
+        options:{
+            title:{
+                display:true,
+                text:'Largest Cities In Massachusetts',
+                fontSize:25
+            },
+            legend:{
+                display:true,
+                position:'right',
+                labels:{
+                    fontColor:'#000'
+                }
+            },
+            layout:{
+                padding:{
+                    left:50,
+                    right:0,
+                    bottom:0,
+                    top:0
+                }
+            },
+            tooltips:{
+                enabled:true
+            }
+        }
+    });
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+
+//   socket.on('descriptor_set_in_server.js', callback function(){
+//   socket.emit('sending_descriptor', js_object)
+//   })
+  socket.on('refresh_values', function (data) {
+    massPopChart[data][labels] = data.xvals;
+    console.log("DFGDFGDGDFG" + data.xvals);
+    //socket.emit('my other event', { my: 'data' });
+  });
+</script>
 </body>
+</html>
